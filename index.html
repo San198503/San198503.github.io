@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rumesh Sanjaya — Cybersecurity Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c0f;
+    --surface: #11141a;
+    --surface2: #181c24;
+    --border: #1e2430;
+    --accent: #00ff88;
+    --accent2: #0af;
+    --text: #e8edf5;
+    --muted: #6b7790;
+    --danger: #ff4757;
+    --warn: #ffa502;
+    --mono: 'Space Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.6; overflow-x: hidden; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* nav */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem; height: 56px;
+    background: rgba(10,12,15,0.85); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { font-family: var(--mono); font-size: 13px; color: var(--accent); letter-spacing: 0.05em; }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; letter-spacing: 0.03em; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text); }
+
+  /* hero */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center;
+    padding: 0 clamp(1.5rem, 8vw, 8rem);
+    position: relative; overflow: hidden;
+  }
+  .hero-grid {
+    position: absolute; inset: 0; opacity: 0.04;
+    background-image: linear-gradient(var(--accent) 1px, transparent 1px),
+      linear-gradient(90deg, var(--accent) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  .hero-content { position: relative; max-width: 700px; }
+  .hero-tag {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .hero-tag::before {
+    content: ''; display: block; width: 24px; height: 1px; background: var(--accent);
+  }
+  h1 {
+    font-family: var(--mono); font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 700; line-height: 1.1; margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+  }
+  h1 span { color: var(--accent); }
+  .hero-desc { font-size: 1rem; color: var(--muted); max-width: 480px; line-height: 1.8; margin-bottom: 2.5rem; }
+  .hero-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 2.5rem; }
+  .badge {
+    font-family: var(--mono); font-size: 11px; padding: 4px 10px;
+    border: 1px solid var(--border); border-radius: 3px; color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+  .badge.active { border-color: var(--accent); color: var(--accent); }
+  .badge.blue { border-color: var(--accent2); color: var(--accent2); }
+  .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    font-family: var(--mono); font-size: 12px; padding: 10px 20px;
+    letter-spacing: 0.06em; text-decoration: none; border-radius: 3px;
+    transition: all 0.2s; cursor: pointer; border: none;
+  }
+  .btn-primary { background: var(--accent); color: var(--bg); font-weight: 700; }
+  .btn-primary:hover { background: #00e67a; }
+  .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+  .btn-outline:hover { border-color: var(--muted); }
+  .hero-stat {
+    position: absolute; right: clamp(1.5rem, 8vw, 8rem); top: 50%;
+    transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 1.5rem;
+    opacity: 0; animation: fadeIn 0.8s 0.6s forwards;
+  }
+  .stat-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; padding: 1rem 1.25rem; min-width: 130px;
+    text-align: center;
+  }
+  .stat-num { font-family: var(--mono); font-size: 1.8rem; font-weight: 700; color: var(--accent); }
+  .stat-label { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; margin-top: 2px; }
+
+  @keyframes fadeIn { to { opacity: 1; } }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+  .hero-content > * { animation: slideUp 0.6s ease both; }
+  .hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+  .hero-content > *:nth-child(2) { animation-delay: 0.2s; }
+  .hero-content > *:nth-child(3) { animation-delay: 0.3s; }
+  .hero-content > *:nth-child(4) { animation-delay: 0.4s; }
+  .hero-content > *:nth-child(5) { animation-delay: 0.5s; }
+
+  /* sections */
+  section { padding: 5rem clamp(1.5rem, 8vw, 8rem); }
+  .section-header { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 3rem; }
+  .section-num { font-family: var(--mono); font-size: 11px; color: var(--accent); }
+  .section-title { font-family: var(--mono); font-size: 1.3rem; font-weight: 700; letter-spacing: -0.01em; }
+  .section-line { flex: 1; height: 1px; background: var(--border); }
+
+  /* about */
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  .about-text { color: var(--muted); line-height: 1.9; }
+  .about-text p { margin-bottom: 1rem; }
+  .about-text a { color: var(--accent); text-decoration: none; }
+  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .skill-group { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1rem; }
+  .skill-group-title { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; }
+  .skill-tag { display: inline-block; font-size: 12px; color: var(--muted); background: var(--surface2); padding: 3px 8px; border-radius: 3px; margin: 2px; }
+
+  /* projects */
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .project-card {
+    background: var(--surface); padding: 1.5rem;
+    transition: background 0.2s; cursor: pointer;
+    text-decoration: none; display: block; color: inherit;
+  }
+  .project-card:hover { background: var(--surface2); }
+  .project-card:hover .project-arrow { transform: translate(3px, -3px); }
+  .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
+  .project-icon { width: 36px; height: 36px; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+  .project-arrow { font-size: 16px; color: var(--muted); transition: transform 0.2s; }
+  .project-name { font-family: var(--mono); font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .project-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 1rem; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .project-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.05em; color: var(--muted); border: 1px solid var(--border); padding: 2px 7px; border-radius: 2px; }
+
+  /* ctf */
+  .ctf-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .ctf-item {
+    background: var(--surface); padding: 1.25rem 1.5rem;
+    display: grid; grid-template-columns: auto 1fr auto auto;
+    gap: 1.5rem; align-items: center;
+    text-decoration: none; color: inherit; transition: background 0.15s;
+  }
+  .ctf-item:hover { background: var(--surface2); }
+  .ctf-platform { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; white-space: nowrap; }
+  .platform-htb { background: rgba(0,255,136,0.08); color: var(--accent); border: 1px solid rgba(0,255,136,0.2); }
+  .platform-thm { background: rgba(0,170,255,0.08); color: var(--accent2); border: 1px solid rgba(0,170,255,0.2); }
+  .platform-pico { background: rgba(255,165,2,0.08); color: var(--warn); border: 1px solid rgba(255,165,2,0.2); }
+  .ctf-name { font-family: var(--mono); font-size: 13px; font-weight: 700; }
+  .ctf-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .ctf-diff { font-family: var(--mono); font-size: 11px; }
+  .diff-easy { color: var(--accent); }
+  .diff-med { color: var(--warn); }
+  .diff-hard { color: var(--danger); }
+  .ctf-tags { display: flex; gap: 6px; }
+  .ctf-tag { font-size: 11px; color: var(--muted); background: var(--surface2); padding: 2px 8px; border-radius: 2px; white-space: nowrap; }
+
+  /* certs */
+  .certs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+  .cert-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1.25rem; position: relative; overflow: hidden; }
+  .cert-card.done { border-color: rgba(0,255,136,0.3); }
+  .cert-card.inprogress { border-color: rgba(0,170,255,0.3); }
+  .cert-card.planned { opacity: 0.5; }
+  .cert-status {
+    position: absolute; top: 0; right: 0;
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em;
+    padding: 4px 8px;
+  }
+  .cert-card.done .cert-status { background: rgba(0,255,136,0.1); color: var(--accent); }
+  .cert-card.inprogress .cert-status { background: rgba(0,170,255,0.1); color: var(--accent2); }
+  .cert-card.planned .cert-status { background: var(--surface2); color: var(--muted); }
+  .cert-name { font-family: var(--mono); font-size: 14px; font-weight: 700; margin-bottom: 4px; margin-top: 8px; }
+  .cert-issuer { font-size: 12px; color: var(--muted); }
+
+  /* contact */
+  .contact-inner { max-width: 600px; }
+  .contact-inner p { color: var(--muted); margin-bottom: 2rem; line-height: 1.8; }
+  .contact-links { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .contact-link {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--surface); padding: 1rem 1.25rem;
+    text-decoration: none; color: var(--text); transition: background 0.15s;
+  }
+  .contact-link:hover { background: var(--surface2); }
+  .contact-link-left { display: flex; align-items: center; gap: 12px; }
+  .contact-link-label { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .contact-link-val { font-size: 13px; }
+  .contact-link-arrow { color: var(--muted); font-size: 14px; }
+
+  /* footer */
+  footer {
+    padding: 2rem clamp(1.5rem, 8vw, 8rem);
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  footer p { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .footer-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+  @media (max-width: 768px) {
+    .hero-stat { display: none; }
+    .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .ctf-item { grid-template-columns: 1fr 1fr; }
+    .ctf-tags { display: none; }
+    nav .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">// your-name.sec</span>
+  <div class="nav-links">
+    <a href="#about">about</a>
+    <a href="#projects">projects</a>
+    <a href="#ctf">ctf writeups</a>
+    <a href="#certs">certs</a>
+    <a href="#contact">contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-tag">cybersecurity researcher</div>
+    <h1>Hi, I'm<br><span>Rumesh Sanjaya.</span></h1>
+    <p class="hero-desc">
+      Aspiring penetration tester with a passion for offensive security, CTF competitions, and building tools that break things (ethically). Currently working through HTB and PNPT prep.
+    </p>
+    <div class="hero-badges">
+      <span class="badge active">pentest</span>
+      <span class="badge active">web security</span>
+      <span class="badge blue">network sec</span>
+      <span class="badge blue">ctf player</span>
+      <span class="badge">python</span>
+      <span class="badge">linux</span>
+    </div>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">view my work</a>
+      <a href="#contact" class="btn btn-outline">get in touch</a>
+    </div>
+  </div>
+  <div class="hero-stat">
+    <div class="stat-card">
+      <div class="stat-num">12+</div>
+      <div class="stat-label">CTF machines</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">3</div>
+      <div class="stat-label">certs earned</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">8+</div>
+      <div class="stat-label">tools built</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <span class="section-title">about_me</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>
+        I'm a cybersecurity enthusiast focused on offensive security and penetration testing.
+        With a background in [your background], I made the move into security because I love
+        understanding how systems break — and how to fix them.
+      </p>
+      <p>
+        I spend my time working through <a href="#">HackTheBox</a> and <a href="#">TryHackMe</a> machines,
+        building custom recon tools in Python, and documenting everything I learn.
+        This site is my public knowledge base and portfolio.
+      </p>
+      <p>
+        Currently preparing for the <strong style="color:var(--text)">PNPT</strong> and working toward
+        OSCP. Open to junior pentester, security analyst, or SOC roles.
+      </p>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <div class="skill-group-title">web security</div>
+        <span class="skill-tag">Burp Suite</span>
+        <span class="skill-tag">SQLi</span>
+        <span class="skill-tag">XSS</span>
+        <span class="skill-tag">SSRF</span>
+        <span class="skill-tag">OWASP Top 10</span>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">network</div>
+        <span class="skill-tag">Nmap</span>
+        <span class="skill-tag">Wireshark</span>
+        <span class="skill-tag">Metasploit</span>
+        <span class="skill-tag">Netcat</span>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">systems</div>
+        <span class="skill-tag">Linux privesc</span>
+        <span class="skill-tag">Windows privesc</span>
+        <span class="skill-tag">GTFOBins</span>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">scripting</div>
+        <span class="skill-tag">Python</span>
+        <span class="skill-tag">Bash</span>
+        <span class="skill-tag">Git</span>
+        <span class="skill-tag">Docker</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <span class="section-title">implementations</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="projects-grid">
+    <a href="https://github.com/San198503/implementations/tree/main/recon-tool" class="project-card">
+      <div class="project-header">
+        <div class="project-icon" style="background:rgba(0,255,136,0.1);">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6" stroke="#00ff88" stroke-width="1.3"/><path d="M9 6v3l2 2" stroke="#00ff88" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <span class="project-arrow">↗</span>
+      </div>
+      <div class="project-name">recon-automator</div>
+      <div class="project-desc">Python script that chains Nmap, Gobuster, and Nikto into a single recon pipeline. Generates a structured report for each target.</div>
+      <div class="project-tags">
+        <span class="project-tag">python</span>
+        <span class="project-tag">nmap</span>
+        <span class="project-tag">automation</span>
+      </div>
+    </a>
+    <a href="https://github.com/San198503/implementations/tree/main/sqli-scanner" class="project-card">
+      <div class="project-header">
+        <div class="project-icon" style="background:rgba(0,170,255,0.1);">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="5" width="12" height="8" rx="2" stroke="#0af" stroke-width="1.3"/><path d="M6 9h6" stroke="#0af" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <span class="project-arrow">↗</span>
+      </div>
+      <div class="project-name">sqli-tester</div>
+      <div class="project-desc">Custom SQLi detection tool that tests common injection patterns against login forms and REST endpoints. Built for educational CTF use.</div>
+      <div class="project-tags">
+        <span class="project-tag">python</span>
+        <span class="project-tag">web</span>
+        <span class="project-tag">sqli</span>
+      </div>
+    </a>
+    <a href="https://github.com/San198503/implementations/tree/main/privesc-checklist" class="project-card">
+      <div class="project-header">
+        <div class="project-icon" style="background:rgba(255,165,2,0.1);">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3l1.5 4.5H15l-3.75 2.7 1.5 4.5L9 12l-3.75 2.7 1.5-4.5L3 7.5h4.5L9 3z" stroke="#ffa502" stroke-width="1.2" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="project-arrow">↗</span>
+      </div>
+      <div class="project-name">privesc-checklist</div>
+      <div class="project-desc">Interactive Bash script that runs through Linux privilege escalation checks systematically and colour-codes findings by severity.</div>
+      <div class="project-tags">
+        <span class="project-tag">bash</span>
+        <span class="project-tag">linux</span>
+        <span class="project-tag">privesc</span>
+      </div>
+    </a>
+    <a href="https://github.com/San198503/implementations" class="project-card" style="border-left: 2px solid rgba(0,255,136,0.2);">
+      <div class="project-header">
+        <div class="project-icon" style="background:var(--surface2);">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v12M3 9h12" stroke="var(--muted)" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <span class="project-arrow" style="color:var(--accent);">↗</span>
+      </div>
+      <div class="project-name" style="color:var(--accent);">view all on github</div>
+      <div class="project-desc">More scripts, labs, and implementations in the full repository. Updated regularly.</div>
+      <div class="project-tags">
+        <span class="project-tag">github.com/San198503</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- CTF WRITEUPS -->
+<section id="ctf">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <span class="section-title">ctf_writeups</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="ctf-list">
+    <a href="https://github.com/San198503/ctf-writeups/blob/main/htb/machine-name.md" class="ctf-item">
+      <span class="ctf-platform platform-htb">HTB</span>
+      <div>
+        <div class="ctf-name">Machine Name</div>
+        <div class="ctf-desc">Exploited misconfigured SMB share → RCE via CVE-XXXX → Kerberoasting for domain admin</div>
+      </div>
+      <span class="ctf-diff diff-med">medium</span>
+      <div class="ctf-tags">
+        <span class="ctf-tag">smb</span>
+        <span class="ctf-tag">kerberos</span>
+        <span class="ctf-tag">ad</span>
+      </div>
+    </a>
+    <a href="https://github.com/San198503/ctf-writeups/blob/main/htb/machine2.md" class="ctf-item">
+      <span class="ctf-platform platform-htb">HTB</span>
+      <div>
+        <div class="ctf-name">Another Machine</div>
+        <div class="ctf-desc">Web app SQLi on login form → LFI via file upload → sudo misconfiguration for root</div>
+      </div>
+      <span class="ctf-diff diff-easy">easy</span>
+      <div class="ctf-tags">
+        <span class="ctf-tag">sqli</span>
+        <span class="ctf-tag">lfi</span>
+        <span class="ctf-tag">sudo</span>
+      </div>
+    </a>
+    <a href="https://github.com/San198503/ctf-writeups/blob/main/thm/room.md" class="ctf-item">
+      <span class="ctf-platform platform-thm">THM</span>
+      <div>
+        <div class="ctf-name">Room Name</div>
+        <div class="ctf-desc">SSRF to internal metadata service → credential theft → AWS IAM privilege escalation</div>
+      </div>
+      <span class="ctf-diff diff-hard">hard</span>
+      <div class="ctf-tags">
+        <span class="ctf-tag">ssrf</span>
+        <span class="ctf-tag">aws</span>
+        <span class="ctf-tag">iam</span>
+      </div>
+    </a>
+    <a href="https://github.com/San198503/ctf-writeups/blob/main/picoctf/challenge.md" class="ctf-item">
+      <span class="ctf-platform platform-pico">picoCTF</span>
+      <div>
+        <div class="ctf-name">Challenge Name</div>
+        <div class="ctf-desc">Binary exploitation — buffer overflow with ret2libc. Manual ROP chain construction.</div>
+      </div>
+      <span class="ctf-diff diff-hard">hard</span>
+      <div class="ctf-tags">
+        <span class="ctf-tag">binary</span>
+        <span class="ctf-tag">rop</span>
+        <span class="ctf-tag">pwn</span>
+      </div>
+    </a>
+    <a href="https://github.com/San198503/ctf-writeups" class="ctf-item" style="justify-content:center; color:var(--accent);">
+      <span style="font-family:var(--mono); font-size:12px;">view all writeups on github ↗</span>
+    </a>
+  </div>
+</section>
+
+<!-- CERTS -->
+<section id="certs">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <span class="section-title">certifications</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="certs-grid">
+    <div class="cert-card done">
+      <span class="cert-status">EARNED</span>
+      <div class="cert-name">eJPT</div>
+      <div class="cert-issuer">eLearnSecurity</div>
+    </div>
+    <div class="cert-card done">
+      <span class="cert-status">EARNED</span>
+      <div class="cert-name">Security+</div>
+      <div class="cert-issuer">CompTIA</div>
+    </div>
+    <div class="cert-card inprogress">
+      <span class="cert-status">IN PROGRESS</span>
+      <div class="cert-name">PNPT</div>
+      <div class="cert-issuer">TCM Security</div>
+    </div>
+    <div class="cert-card planned">
+      <span class="cert-status">PLANNED</span>
+      <div class="cert-name">OSCP</div>
+      <div class="cert-issuer">Offensive Security</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <span class="section-title">contact</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="contact-inner">
+    <p>Open to junior pentester, security analyst, or SOC analyst roles. Also happy to connect with other security folks, collaborate on CTFs, or just talk shop.</p>
+    <div class="contact-links">
+      <a href="mailto:rumesh_sanjaya@hotmail.com" class="contact-link">
+        <div class="contact-link-left">
+          <span class="contact-link-label">email</span>
+          <span class="contact-link-val">rumesh_sanjaya@hotmail.com</span>
+        </div>
+        <span class="contact-link-arrow">↗</span>
+      </a>
+      <a href="https://github.com/San198503" class="contact-link">
+        <div class="contact-link-left">
+          <span class="contact-link-label">github</span>
+          <span class="contact-link-val">github.com/San198503</span>
+        </div>
+        <span class="contact-link-arrow">↗</span>
+      </a>
+      <a href="https://linkedin.com/in/San198503" class="contact-link">
+        <div class="contact-link-left">
+          <span class="contact-link-label">linkedin</span>
+          <span class="contact-link-val">linkedin.com/in/San198503</span>
+        </div>
+        <span class="contact-link-arrow">↗</span>
+      </a>
+      <a href="https://app.hackthebox.com/profile/yourid" class="contact-link">
+        <div class="contact-link-left">
+          <span class="contact-link-label">hackthebox</span>
+          <span class="contact-link-val">app.hackthebox.com/profile/yourid</span>
+        </div>
+        <span class="contact-link-arrow">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>// built by your-name · hosted on github pages</p>
+  <div style="display:flex; align-items:center; gap:8px;">
+    <div class="footer-dot"></div>
+    <p style="font-size:11px; color:var(--muted);">available for opportunities</p>
+  </div>
+</footer>
+
+</body>
+</html>
